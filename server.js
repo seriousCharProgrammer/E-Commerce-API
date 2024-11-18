@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const CartRoute = require("./Routes/cartroute");
 const errorHandler = require("./Middlewares/error");
 const morgan = require("morgan");
+const orderRoute = require("./Routes/orderRoute");
 const authRouter = require("./Routes/authRoute");
 const cookieParser = require("cookie-parser");
 const productRouter = require("./Routes/productRoute");
@@ -19,6 +20,7 @@ connect();
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/cart", CartRoute);
+app.use("/api/v1/orders", orderRoute);
 app.use(errorHandler);
 const server = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
