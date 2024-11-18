@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel");
 const ErrorResponse = require("../utils/ErrorResponse");
 const asyncHandler = require("express-async-handler");
+const { Sequelize } = require("sequelize");
 
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
@@ -16,13 +17,18 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
   //Make sure token exists
   if (!token) {
-    return next(new ErrorResponse("not authorized to acces this route", 401));
+    return next(
+      new ErrorResponse(
+        "not authorized to access this route please login in or register",
+        401
+      )
+    );
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SEC);
-    console.log(decoded);
-    req.user = await User.findById(decoded.id);
+    console.log(decoded.id);
+    req.user = await User.findByPk(decoded.id);
     next();
   } catch (err) {
     return next(new ErrorResponse("not authorized to acces this route", 401));

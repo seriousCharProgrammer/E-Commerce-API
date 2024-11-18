@@ -23,7 +23,7 @@ const Cart = db.define(
       defaultValue: 1,
     },
   },
-  { timestamps: true, tableName: "Cart" }
+  { timestamps: false, tableName: "Cart" }
 );
 
 module.exports = Cart;
