@@ -49,7 +49,9 @@ User.prototype.getSignedJwtToken = function () {
 };
 User.prototype.matchPassword = async function (enteredpassword) {
   return await bcrypt.compare(enteredpassword, this.password);
-}; // Before creating a new user (when saving the password for the first time)
+};
+
+// Before creating a new user (when saving the password for the first time)
 User.beforeCreate(async (user, options) => {
   if (user.password) {
     const salt = await bcrypt.genSalt(10); // Generate salt
@@ -58,9 +60,8 @@ User.beforeCreate(async (user, options) => {
 });
 
 // Before updating an existing user (e.g., updating password)
-User.beforeUpdate(async (user, options) => {
-  if (user.changed("password")) {
-    // Check if the password field has been modified
+User.beforeUpdate(async function (user) {
+  if (user.password) {
     const salt = await bcrypt.genSalt(10); // Generate salt
     user.password = await bcrypt.hash(user.password, salt); // Hash the password
   }

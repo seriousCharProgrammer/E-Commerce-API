@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "pm2": "pm2 start server.js",
+    "stop": "pm2 stop server.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +22,7 @@
     "morgan": "^1.10.0",
     "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
+    "pm2": "^5.4.3",
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2"
   }
