@@ -1,7 +1,9 @@
 const { Sequelize, DataTypes, DATE } = require("sequelize");
-
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+const bcrypt = require("bcryptjs");
 const { db } = require("../DB");
-
+dotenv.config({ path: "./config/config.env" });
 const User = db.define(
   "User",
   {
@@ -39,5 +41,29 @@ const User = db.define(
   },
   { timestamps: true, tableName: "User" }
 );
+
+User.prototype.getSignedJwtToken = function () {
+  return jwt.sign({ id: this.id }, process.env.JWT_SEC, {
+    expiresIn: process.env.JWT_EXP,
+  });
+};
+User.prototype.matchPassword = async function (enteredpassword) {
+  return await bcrypt.compare(enteredpassword, this.password);
+}; // Before creating a new user (when saving the password for the first time)
+User.beforeCreate(async (user, options) => {
+  if (user.password) {
+    const salt = await bcrypt.genSalt(10); // Generate salt
+    user.password = await bcrypt.hash(user.password, salt); // Hash the password
+  }
+});
+
+// Before updating an existing user (e.g., updating password)
+User.beforeUpdate(async (user, options) => {
+  if (user.changed("password")) {
+    // Check if the password field has been modified
+    const salt = await bcrypt.genSalt(10); // Generate salt
+    user.password = await bcrypt.hash(user.password, salt); // Hash the password
+  }
+});
 
 module.exports = User;
