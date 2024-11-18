@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("user", {
+    await queryInterface.createTable("User", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -36,7 +36,7 @@ module.exports = {
       },
     });
 
-    await queryInterface.createTable("product", {
+    await queryInterface.createTable("Product", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -68,7 +68,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "user",
+          model: "User",
           key: "id",
         },
       },
@@ -93,7 +93,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "user",
+          model: "User",
           key: "id",
         },
       },
@@ -101,7 +101,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "product",
+          model: "Product",
           key: "id",
         },
       },
@@ -129,7 +129,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "user",
+          model: "User",
           key: "id",
         },
       },
