@@ -14,7 +14,7 @@ const errorHandler = function (err, req, res, next) {
     error = new ErrorResponse(message, 400);
   }
   if (err instanceof ForeignKeyConstraintError) {
-    const message = "Invalid foreign key reference.";
+    const message = `Invalid foreign key reference with id ${err.index}.`;
     error = new ErrorResponse(message, 400);
   }
   if (err instanceof ValidationError) {
