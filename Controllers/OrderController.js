@@ -37,6 +37,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     console.log(cartItems[i].product_id);
     const product = await Product.findByPk(cartItems[i].product_id);
     prodArr.push(product.id);
+
     if (!product || product.stock < cartItems[i].quantity) {
       throw new Error(
         `Product ${product?.name || cartItems[i].productId} is out of stock`
