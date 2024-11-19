@@ -80,34 +80,36 @@ Start the application by running:
 
 Method Endpoint Description
 
-    POST /auth/register Register a new user
-    POST /auth/login Log in and receive a JWT token
+    POST /api/v1/auth/register Register a new user
+    POST /api/v1/auth/login Log in and receive a JWT token
 
 ### Products
 
 Method Endpoint Description
 
-    GET /products Get all products
-    POST /products Add a new product
-    PUT /products/:id Update an existing product
-    DELETE /products/:id Delete a product
+    GET /api/v1/products Get all products
+    GET /api/v1/products/:id Get One product
+    POST /api/v1/products Add a new product
+    PUT /api/v1/products/:id Update an existing product
+    DELETE /api/v1/products/:id Delete a product
 
 ### Cart
 
 Method Endpoint Description
 
-    GET /cart View items in the cart
-    POST /cart Add a product to the cart
-    PUT /cart/:id Update cart item quantity
-    DELETE /cart/:id Remove an item from the cart
+    GET api/v1/cart Get all products from the cart
+    GET api/v1/cart/:id Get one product from the cart
+    POST api/v1/cart Add a product to the cart
+    PUT api/v1/cart/:id Update cart item quantity
+    DELETE api/v1/cart/:id Remove an item from the cart
 
 ### Orders
 
 Method Endpoint Description
 
-    POST /orders Place an order from the cart
-    GET /orders View all orders (Buyer only)
-    GET /orders/:id View specific order details
+    POST /api/v1/orders Place an order from the cart
+    GET /api/v1/orders View all orders (Buyer only)
+    GET /api/v1/orders/:id View specific order details
 
 ### **Technologies Used**
 
