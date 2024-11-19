@@ -118,4 +118,8 @@ License
 This project is licensed under the MIT License.
 Author
 
+### Documentation in PostMan
+
+https://documenter.getpostman.com/view/39411593/2sAYBRFZ3J
+
 💻 Crafted by SeriousCharProgrammer 🚀
