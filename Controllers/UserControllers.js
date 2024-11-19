@@ -4,12 +4,74 @@ const User = require("../models/UserModel");
 const Order = require("../models/OrderModel");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-  const users = await User.findAll();
+  let queryOptions = {};
+  queryOptions.attributes = { exclude: ["password"] };
+
+  // Handling `gt`, `gte`, `lt`, `lte`, `in` in the query string
+  Object.keys(req.query).forEach((key) => {
+    if (key.match(/(gt|gte|lt|lte|in)/)) {
+      queryOptions.where = queryOptions.where || {};
+      const operator = `$${key}`;
+      queryOptions.where[key] = req.query[key];
+    }
+  });
+
+  // Select fields
+  if (req.query.select) {
+    const fields = req.query.select.split(",").join(", ");
+    queryOptions.attributes = fields.split(", ");
+    if (fields.includes("password")) {
+      return next(new ErrorResponse("password field cannot be selected", 404));
+    }
+  }
+
+  // Sorting
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(", ");
+    queryOptions.order = [[sortBy, "ASC"]];
+  } else {
+    queryOptions.order = [["createdAt", "DESC"]];
+  }
+
+  // Pagination
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const offset = (page - 1) * limit;
+
+  queryOptions.limit = limit;
+  queryOptions.offset = offset;
+
+  // Count total records
+  const total = await User.count();
+  const totalPages = total / limit;
+
+  // Fetch the results
+  const results = await User.findAll(queryOptions);
+
+  // Pagination
+  const pagination = {};
+  if (offset + limit < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+  if (offset > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
 
   res.status(200).json({
     success: true,
-    data: users,
+    total_pages: totalPages,
+    count: results.length,
+    pagination,
+    data: results,
   });
+
+  next();
 });
 
 exports.getOneUser = asyncHandler(async (req, res, next) => {
