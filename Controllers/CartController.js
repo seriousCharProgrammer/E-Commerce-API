@@ -1,7 +1,7 @@
 const { where } = require("sequelize");
 const Cart = require("../models/CartModel");
 const asyncHandler = require("express-async-handler");
-
+const ErrorResponse = require("../utils/ErrorResponse");
 exports.getCartItems = asyncHandler(async (req, res, next) => {
   const items = await Cart.findAll({ where: { user_id: req.user.id } });
 
@@ -15,6 +15,11 @@ exports.addItemCart = asyncHandler(async (req, res, next) => {
   let existingitem = await Cart.findOne({
     where: { user_id: req.user.id, product_id: req.body.product_id },
   });
+  if (!existingitem || existingitem.stock === 0) {
+    return next(
+      new ErrorResponse("the product doesnt exist or out of stock", 404)
+    );
+  }
 
   if (existingitem) {
     // If the product already exists, update the quantity
